@@ -1,7 +1,7 @@
 //Module imports
 require('dotenv').config()
 const http= require('http')
-const {Client}= require('pg')
+const {Pool}= require('pg')
 
 //Config imports
 const app= require('./app')
@@ -11,12 +11,13 @@ const PORT= process.env.PORT
 const server= http.createServer(app)
 
 //Create PostgreSQL client object
-const dbConfig= new Client({
+const dbConfig= new Pool({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
-    database: process.env.DATABASE_NAME
+    database: process.env.DATABASE_NAME,
+    ssl: true
 })
 
 async function startServer(){
@@ -26,12 +27,12 @@ async function startServer(){
     })
 
     //TEST DB connexion: only for testing purposes
-    // dbConfig.query('SELECT * FROM listing', (err, result) => {
-    //     if (err) {
-    //         console.error('Error executing query', err);
-    //     } else {
-    //         console.log('Query result:', result.rows);
-    //     }})
+    dbConfig.query('SELECT * FROM test', (err, result) => {
+        if (err) {
+            console.error('Error executing query', err);
+        } else {
+            console.log('Query result:', result.rows);
+        }})
 
     server.listen(PORT, ()=> {
         console.log(`Listening on port ${PORT}`)
