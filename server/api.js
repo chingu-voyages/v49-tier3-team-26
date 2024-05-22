@@ -10,8 +10,8 @@ const healthRouter= require('./routes/health.router')
 api.use(healthRouter)
 
 
-//Other endpoints will come here 
-//....
-
+//User Registration
+const registerRouter= require('./routes/userRegistration/register.router')
+api.use(registerRouter)
 
 module.exports= api

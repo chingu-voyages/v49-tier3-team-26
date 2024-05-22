@@ -27,12 +27,12 @@ async function startServer(){
     })
 
     //TEST DB connexion: only for testing purposes
-    dbConfig.query('SELECT * FROM test', (err, result) => {
-        if (err) {
-            console.error('Error executing query', err);
-        } else {
-            console.log('Query result:', result.rows);
-        }})
+    // dbConfig.query('SELECT * FROM test', (err, result) => {
+    //     if (err) {
+    //         console.error('Error executing query', err);
+    //     } else {
+    //         console.log('Query result:', result.rows);
+    //     }})
 
     server.listen(PORT, ()=> {
         console.log(`Listening on port ${PORT}`)
