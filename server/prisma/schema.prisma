@@ -14,12 +14,64 @@ datasource db {
 }
 
 model User {
-  id                     String   @id @default(uuid())
+  id                     String    @id @default(uuid())
   email                  String
-  password               String?
+  password               String
   role                   String
-  token                  String?
-  tokenCreationTimestamp DateTime @db.Timestamptz(3) @default(now()) 
-  
+  token                  String
+  tokenCreationTimestamp DateTime? @default(now()) @db.Timestamptz(3)
+  Listing                Listing[]
 }
 
+model Listing {
+  id          String  @id @default(uuid())
+  petName     String
+  petPhoto    String
+  petType     String
+  petBreed    String
+  petAge      Int
+  location    String
+  description String?
+  tags        String
+
+  creationTimestamp   DateTime @default(now())
+  lastUpdateTimestamp DateTime @updatedAt
+  published           Boolean
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
+}
+
+model Form {
+  id                  String   @id @default(uuid())
+  petType             String
+  questionType        String
+  question            String
+  answerOptions       String
+  creationTimestamp   DateTime @default(now())
+  lastUpdateTimestamp DateTime @updatedAt
+}
+
+model Application {
+  id                  String   @id @default(uuid())
+  listingId           String
+  formId              String
+  userId              String
+  hasDocuments        Boolean
+  status              String
+  creationTimestamp   DateTime @default(now())
+  lastUpdateTimestamp DateTime @updatedAt
+}
+
+model Document {
+  id                  String   @id @default(uuid())
+  applicationId       String
+  document            Bytes    @db.ByteA
+  creationTimestamp   DateTime @default(now())
+  lastUpdateTimestamp DateTime @updatedAt
+}
+
+// Only for Testing - To Be Deleted Later
+model Test {
+  id String @id @default(uuid())
+}

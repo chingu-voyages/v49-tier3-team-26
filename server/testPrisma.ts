@@ -1,8 +1,12 @@
+
+// Just for Testing
+// This file will be DELETED later
+
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-export async function getUsers() {
+async function getUsers() {
   // ... you will write your Prisma Client queries here
   const allUsers = await prisma.user.findMany()
   console.log(allUsers)
