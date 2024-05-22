@@ -12,6 +12,7 @@ async function getUsers() {
   console.log(allUsers)
 }
 
+
 getUsers()
   .then(async () => {
     await prisma.$disconnect()
