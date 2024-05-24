@@ -25,7 +25,7 @@ async function createUser(username, password,role){
                     email: username,
                     password: hash,
                     role: role,
-                    token: 'This should be nullable',
+                    token: null,
                     tokenCreationTimestamp: new Date().toISOString()
                 }
                
