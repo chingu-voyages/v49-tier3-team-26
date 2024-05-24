@@ -6,8 +6,7 @@ const prisma = new PrismaClient({log: ['query', 'info', 'warn', 'error'],  error
 
 async function newListing(listing){
          //Check required properties
-    if (!listing.id || 
-        !listing.petName || 
+    if (!listing.petName || 
         !listing.petPhoto ||
         !listing.petType ||
         !listing.petAge ||
@@ -20,17 +19,12 @@ async function newListing(listing){
         })
     }
         try {
-            //Pseudo code for userId (role=shelter) check
 
-//Before attempting to create a listing via Prisma we have to perform a check on the userId provided.
-// If the provided userId has a role=shelter then they are allowed to create a listing
-// Otherwise we return an error : User does not have access rights for this.
-
-// So i would add another await method to find user by id 
-//(probably something like findUnique) and the check the returned record that indeed it has the shelter role
-// If the returned role is correct the we proceed to the create
-            const isUserRoleShelter = await prisma.user.findUnique(listing.userId)
-            console.log(isUserRoleShelter)
+            const isUserRoleShelter = await prisma.user.findUnique({
+                where: {
+                    id: listing.userId,
+                  },
+            })
             if(isUserRoleShelter.role === "shelter") {
                 const newListing = await  prisma.listing.create({
                     data: {
@@ -43,7 +37,8 @@ async function newListing(listing){
                         location: listing.location,
                         description: listing.description,
                         tags: listing.tags,
-                        userId: listing.userId
+                        userId: listing.userId,
+                        published: listing.published
                     }
                   })
                   return ({message: "New listing has been created with id: " + newListing.id})
