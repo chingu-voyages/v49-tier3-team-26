@@ -1,3 +1,7 @@
+# Documents
+[BACKLOG](https://docs.google.com/document/d/1O9LEH8J2VEupbnVGXx2t0OlGF_ILeCfzrA4r-leEB3A/edit)
+[TEAM DECISION LOG](https://docs.google.com/document/d/1xzgP2-YeRcpab4oaQgNAHGEZwtkBKgMYUJHzyUrUQR4/edit)
+
 # voyage-tasks
 
 Your project's `readme` is as important to success as your code. For 
