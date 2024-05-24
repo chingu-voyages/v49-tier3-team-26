@@ -26,17 +26,17 @@ model User {
 model Listing {
   id          String  @id @default(uuid())
   petName     String
-  petPhoto    String
+  petPhoto   String
   petType     String
-  petBreed    String
+  petBreed    String?
   petAge      Int
   location    String
   description String?
-  tags        String
+  tags        String?
 
   creationTimestamp   DateTime @default(now())
   lastUpdateTimestamp DateTime @updatedAt
-  published           Boolean
+  published           Boolean @default(false)
 
   user   User   @relation(fields: [userId], references: [id])
   userId String
