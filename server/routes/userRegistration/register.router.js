@@ -7,6 +7,8 @@ const {
 } = require("./register.controller");
 
 
-registerRouter.post('/user/register', httpHandleUserRegistration);
+
+//Router for user registration (create new account)
+registerRouter.post('/user', httpHandleUserRegistration);
 
 module.exports = registerRouter;

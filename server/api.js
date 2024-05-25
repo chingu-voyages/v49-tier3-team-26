@@ -14,4 +14,8 @@ api.use(healthRouter)
 const registerRouter= require('./routes/userRegistration/register.router')
 api.use(registerRouter)
 
+//User login
+const loginRouter= require('./routes/userLogin/userLogin.router')
+api.use(loginRouter)
+
 module.exports= api
