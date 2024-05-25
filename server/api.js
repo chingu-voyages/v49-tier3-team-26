@@ -18,4 +18,8 @@ api.use(registerRouter)
 const listingRouter= require('./routes/listing/listing.router')
 api.use(listingRouter)
 
+//User login
+const loginRouter= require('./routes/userLogin/userLogin.router')
+api.use(loginRouter)
+
 module.exports= api

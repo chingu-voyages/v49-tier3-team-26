@@ -1,8 +1,10 @@
+//ORM connexion
 const { PrismaClient }=require('@prisma/client')
-const bcrypt = require('bcrypt');
-
 const prisma = new PrismaClient({log: ['query', 'info', 'warn', 'error'],  errorFormat: "minimal",}
 )
+
+//Imports
+const bcrypt = require('bcrypt');
 
 async function createUser(username, password,role){
          //Check required properties
@@ -24,9 +26,7 @@ async function createUser(username, password,role){
                 data: {
                     email: username,
                     password: hash,
-                    role: role,
-                    token: 'This should be nullable',
-                    tokenCreationTimestamp: new Date().toISOString()
+                    role: role
                 }
                
               })
@@ -47,8 +47,57 @@ async function createUser(username, password,role){
 
     } 
   
+async function verifyPassword(username, password, done){
+        //Check required properties
+        if (!username || !password){
+        return ({
+            error: 'Missing required properties.'
+        })
+    }
+
+        //Retrieve stored password
+        const user= await prisma.user.findMany({
+            where: {
+                email: username
+            },
+            select: {
+                password: true,
+                email: true,
+                id: true
+            } 
+        })
+        //Check if stored hash is the same as provided user login password
+        try {
+            const hashCompare= bcrypt.compareSync(password, user[0].password)
+            if (hashCompare){
+        
+                return done(null,user)
+            } else {
+                return done(null, false, {error: "Incorrect username or password."})
+            }
+        }
+           catch(err) {
+            return done(null, false, {error: "Incorrect username or password."})
+           }
+           
+        }
+   
+async function findUserById(userId){
+    const user= await prisma.user.findUnique({
+        where: {
+            id: userId
+        },
+        select: {
+            id: true
+        } 
+    })
+    return user
+}
 
 
 module.exports= {
-    createUser
+    createUser,
+    verifyPassword,
+    findUserById
+
 }
