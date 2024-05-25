@@ -18,11 +18,24 @@ function httpHandleUserLogin(req, res){
           }
         }
       })(req, res);
-  
 }
 
+function handleUserLogout(req, res){
+  if(req.isAuthenticated()){
+    req.logout((err) => {
+      if (err) {
+        return next(err);
+      }
+      return res.json({ message: "Logout successful." });
+    });
+  } else {
+    res.json({message: "There was an error."})
+  }
+   
+}
 
 
  module.exports = {
     httpHandleUserLogin,
+    handleUserLogout
  }
