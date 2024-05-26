@@ -94,10 +94,26 @@ async function findUserById(userId){
     return user
 }
 
+async function searchUser(query){
+    const allUsers= await prisma.user.findMany({
+        where: {
+            email: query.username? query.username: {not: ''},
+            id: query.id? query.id: {not: ''} ,
+            role: query.role? query.role: {not:''}
+        },
+        select: {
+            id: true,
+            email: true,
+            role: true 
+        } 
+    })
+    return allUsers
+}
 
 module.exports= {
     createUser,
     verifyPassword,
-    findUserById
+    findUserById,
+    searchUser
 
 }

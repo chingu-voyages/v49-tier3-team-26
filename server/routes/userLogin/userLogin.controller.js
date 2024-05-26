@@ -12,7 +12,8 @@ function httpHandleUserLogin(req, res){
           } else {
             //If username & password are correct, Passport will log in the user to the passport session
             req.logIn(user, function(err) {
-              res.json({ message: "Login successful." })
+    
+              res.json({ message: "Login successful.", data: {"username": user[0].email, "userId": user[0].id } })
             }); 
             ;
           }
