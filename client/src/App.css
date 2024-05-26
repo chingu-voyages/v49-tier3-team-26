@@ -4,3 +4,18 @@
 
   text-align: center;
 }
+
+/* Override Bootstrap primary button color */
+.btn-primary {
+  background-color: #ff6347 !important; /* Custom primary color */
+  border-color: #ff6347 !important; /* Custom primary color */
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open > .dropdown-toggle.btn-primary {
+  background-color: #e55347 !important; /* Darker shade for hover/focus */
+  border-color: #e55347 !important; /* Darker shade for hover/focus */
+}
