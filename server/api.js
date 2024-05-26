@@ -22,4 +22,8 @@ api.use(listingRouter)
 const loginRouter= require('./routes/userLogin/userLogin.router')
 api.use(loginRouter)
 
+//User search
+const userSearchRouter= require('./routes/userSearch/userSearch.router')
+api.use(userSearchRouter)
+
 module.exports= api
