@@ -24,7 +24,7 @@ function Chat() {
 
   useEffect(() => {
     const fetchAdmins = async () => {
-      const response = await axios.get('/api/auth/online-admins', { withCredentials: true });
+      const response = await axios.get('https://pawfect-match-api.onrender.com/v1/user/search', { withCredentials: true });
       setAdmins(response.data);
     };
 
@@ -88,6 +88,6 @@ function Chat() {
       )}
     </div>
   );
-};
+}
 
 export default Chat;

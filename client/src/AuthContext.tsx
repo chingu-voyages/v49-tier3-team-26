@@ -8,15 +8,15 @@ interface Adopter {
 }
 
 interface Shelter extends Adopter {
-  email: string;
+  username: string;
 }
 
 interface AuthContextProps {
   user: Adopter | null;
   admins: Shelter[];
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, role: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>;
+  register: (username: string, password: string, role: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get('https://pawfect-match-api.onrender.com/user', { withCredentials: true });
+        const response = await axios.get('https://pawfect-match-api.onrender.com/v1/user/', { withCredentials: true });
         setUser(response.data);
       } catch (error) {
         console.error('No user logged in');
@@ -48,13 +48,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    fetchUser();
+     fetchUser();
     fetchAdmins();
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (username: string, password: string) => {
     try {
-      const response = await axios.post('https://pawfect-match-api.onrender.com/v1/user/login', { email, password }, { withCredentials: true });
+      const response = await axios.post('https://pawfect-match-api.onrender.com/v1/user/login', { username, password }, { withCredentials: true });
       setUser(response.data.user);
       await fetchAdmins();
     } catch (error) {
@@ -65,9 +65,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const register = async (email: string, password: string, role: string) => {
+  const register = async (username: string, password: string, role: string) => {
     try {
-      await axios.post('https://pawfect-match-api.onrender.com/v1/user', { email, password, role });
+      await axios.post('https://pawfect-match-api.onrender.com/v1/user', { username, password, role });
     } catch (error) {
       console.error('Registration failed', error);
     }
