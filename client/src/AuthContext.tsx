@@ -30,7 +30,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get('https://pawfect-match-api.onrender.com/v1/user/', { withCredentials: true });
+        const response = await axios.get('https://pawfect-match-api.onrender.com/v1/user/search?role=adopter', { withCredentials: true });
         setUser(response.data);
       } catch (error) {
         console.error('No user logged in');
@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const fetchAdmins = async () => {
       try {
-        const response = await axios.get('https://pawfect-match-api.onrender.com/v1/user/search', { withCredentials: true });
+        const response = await axios.get('https://pawfect-match-api.onrender.com/v1/user/search?role=shelter', { withCredentials: true });
         setAdmins(response.data);
       } catch (error) {
         console.error('Failed to fetch admins');
