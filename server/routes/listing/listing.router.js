@@ -1,12 +1,27 @@
 const express = require("express");
 
-const registerRouter = express.Router();
+const listingRouter = express.Router();
 
 const {
     httpHandleListingCreation,
+    httpHandleGetListingById,
+    httpHandleListingSearch,
+    httpHandleListingUpdate
 } = require("./listing.controller");
 
 
-registerRouter.post('/listing', httpHandleListingCreation);
+//Create a new listing
+listingRouter.post('/listing', httpHandleListingCreation);
 
-module.exports = registerRouter;
+//Update an existing listing
+listingRouter.patch('/listing/:id', httpHandleListingUpdate)
+
+//Get a listing by id
+listingRouter.get('/listing/:id', httpHandleGetListingById)
+
+
+//Get a listing by id
+listingRouter.get('/listings/search', httpHandleListingSearch)
+
+
+module.exports = listingRouter;
