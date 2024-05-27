@@ -21,7 +21,7 @@ function httpHandleUserLogin(req, res){
       })(req, res);
 }
 
-function handleUserLogout(req, res){
+function httpHandleUserLogout(req, res){
   if(req.isAuthenticated()){
     req.logout((err) => {
       if (err) {
@@ -38,5 +38,5 @@ function handleUserLogout(req, res){
 
  module.exports = {
     httpHandleUserLogin,
-    handleUserLogout
+    httpHandleUserLogout
  }
