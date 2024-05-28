@@ -2,19 +2,20 @@ import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useAuth } from '../AuthContext';
 
+
 interface LoginModalProps {
   show: boolean;
   handleClose: () => void;
 }
 
 function LoginModal({ show, handleClose }: LoginModalProps) {
-  const [email, setEmail] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login(email, password);
+    await login(username, password);
     handleClose();
   };
 
@@ -26,12 +27,12 @@ function LoginModal({ show, handleClose }: LoginModalProps) {
       <Modal.Body>
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
+            <Form.Label>Username</Form.Label>
             <Form.Control
               type="email"
               placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </Form.Group>
