@@ -22,19 +22,31 @@ function httpHandleUserLogin(req, res){
 }
 
 function httpHandleUserLogout(req, res){
+  console.log(req.session)
   if(req.isAuthenticated()){
-    req.logout((err) => {
-      if (err) {
-        return next(err);
-      }
-      return res.json({ message: "Logout successful." });
-    });
-  } else {
-    res.json({message: "There was an error."})
+  //   req.logout((err) => {
+  //     if (err) {
+  //       return next(err);
+  //     }
+  //     return res.json({ message: "Logout successful." });
+  //   });
+  // } else {
+  //   res.json({message: "There was an error."})
+  req.session.destroy(function (err) {
+    if (err){
+      return next(err)
+    }
+    res.clearCookie('connect.sid')
+    return res.json({ message: "Logout successful." })
+    
+  });
   }
+  else {
+    res.clearCookie('connect.sid')
+    res.json({message: "There was an error."})
    
 }
-
+}
 
  module.exports = {
     httpHandleUserLogin,
