@@ -4,23 +4,23 @@ const { prisma } = require("../prisma/prismaClient");
 async function newApplication(application) {
   //Check required properties
 
-  if (
-    !application.listingId ||
-    !application.formId ||
-    !application.userId ||
-    !application.hasDocuments ||
-    !application.status
-  ) {
-    return {
-      error: "Missing required properties.",
-    };
-  }
+  // if (
+  //   !application.listingId ||
+  //   !application.form ||
+  //   !application.userId ||
+  //   !application.hasDocuments ||
+  //   !application.status
+  // ) {
+  //   return {
+  //     error: "Missing required properties.",
+  //   };
+  // }
   try {
     const newApplication = await prisma.application.create({
       data: {
         id: application.id,
         listingId: application.listingId,
-        formId: application.formId,
+        form: application.form,
         userId: application.userId,
         hasDocuments: application.hasDocuments,
         status: application.status,
@@ -61,21 +61,21 @@ async function searchApplication(query) {
         : query.PageSize,
       take: query.pageSize ? Number(query.pageSize) : 5,
       where: {
-        petType: query.type ? query.type.toLowerCase() : { not: "" },
-        petAge: query.minAge ? { gte: Number(query.minAge) } : { gte: 0 },
-        petAge: query.maxAge ? { lte: Number(query.maxAge) } : { gte: 0 },
-        //We always return only published listings in the search
-        published: true,
+        status: query.status ? query.status.toLowerCase() : { not: "" },
+        userId: query.userId ? query.userId.toLowerCase() : { not: "" },
+        listingId: query.listingId
+          ? query.listingId.toLowerCase()
+          : { not: "" },
       },
     });
     //Used for pagination totalItems
     const results = await prisma.application.count({
       where: {
-        petType: query.type ? query.type.toLowerCase() : { not: "" },
-        petAge: query.minAge ? { gte: Number(query.minAge) } : { gte: 0 },
-        petAge: query.maxAge ? { lte: Number(query.maxAge) } : { gte: 0 },
-        //We always return only published listings in the search
-        published: true,
+        status: query.status ? query.status.toLowerCase() : { not: "" },
+        userId: query.userId ? query.userId.toLowerCase() : { not: "" },
+        listingId: query.listingId
+          ? query.listingId.toLowerCase()
+          : { not: "" },
       },
     });
     console.log(results);
@@ -100,7 +100,7 @@ async function updateApplication(id, application) {
       data: {
         id: application.id,
         listingId: application.listingId,
-        formId: application.formId,
+        form: application.form,
         userId: application.userId,
         hasDocuments: application.hasDocuments,
         status: application.status,
@@ -112,9 +112,24 @@ async function updateApplication(id, application) {
   }
 }
 
+async function deleteApplication(id) {
+  console.log(id);
+  try {
+    const deleteApplication = await prisma.application.delete({
+      where: {
+        id: id,
+      },
+    });
+    return deleteApplication;
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
 module.exports = {
   newApplication,
   findApplicationById,
   searchApplication,
   updateApplication,
+  deleteApplication,
 };

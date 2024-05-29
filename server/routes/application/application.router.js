@@ -6,8 +6,8 @@ const {
     httpHandleApplicationCreation,
     httpHandleGetApplicationById,
     httpHandleApplicationSearch,
-    httpHandleApplicationUpdate
-    // httpHandleApplicationDelete
+    httpHandleApplicationUpdate,
+    httpHandleApplicationDelete
 } = require("./application.controller");
 
 
@@ -21,8 +21,14 @@ applicationRouter.patch('/application/:id', httpHandleApplicationUpdate)
 applicationRouter.get('/application/:id', httpHandleGetApplicationById)
 
 
-//Get a application by id
+//Get a application by search query
 applicationRouter.get('/application/search', httpHandleApplicationSearch)
 
+
+//Get a application by search query
+applicationRouter.delete('/application/:id', httpHandleApplicationDelete)
+
+
+httpHandleApplicationDelete
 
 module.exports = applicationRouter;

@@ -3,6 +3,7 @@ const {
   findApplicationById,
   searchApplication,
   updateApplication,
+  deleteApplication,
 } = require("../../models/application.model");
 
 async function httpHandleApplicationCreation(req, res) {
@@ -25,9 +26,16 @@ async function httpHandleApplicationUpdate(req, res) {
   return res.json(handleApplicationUpdate);
 }
 
+async function httpHandleApplicationDelete(req, res) {
+  const handleApplicationDelete = await deleteApplication(req.params.id, req.body);
+  return res.json(handleApplicationDelete);
+}
+
+
 module.exports = {
   httpHandleApplicationCreation,
   httpHandleGetApplicationById,
   httpHandleApplicationSearch,
   httpHandleApplicationUpdate,
+  httpHandleApplicationDelete,
 };
