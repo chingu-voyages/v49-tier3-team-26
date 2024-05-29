@@ -55,7 +55,7 @@ model Form {
 model Application {
   id                  String   @id @default(uuid())
   listingId           String
-  formId              String
+  form                Json    
   userId              String
   hasDocuments        Boolean
   status              String
