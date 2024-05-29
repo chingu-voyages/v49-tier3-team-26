@@ -1,0 +1,29 @@
+.card {
+    
+    margin: 50px;
+    background-color: lightblue;
+    border-radius: 10px;
+}
+
+.focus {
+    font-size: 20px;
+    font-weight: 700;
+    display: flex;
+}
+
+.tags {
+    display: flex;
+    justify-content: end;
+    align-items: end;
+    gap: 5px;
+    text-align: end;
+}
+.tag {
+    width: 42px;
+    height: 16px;
+    font-size: 13px;
+    color: white;
+    background-color: gray;
+    min-width:fit-content;
+    padding: 0 5px;
+}
