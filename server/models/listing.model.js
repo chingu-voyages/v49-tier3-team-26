@@ -75,13 +75,16 @@ async function findListingById(id){
 async function searchListing(query){
   
     try{
+       
         const search= await prisma.listing.findMany({
             skip: query.page? Number(query.page-1)*query.pageSize:query.PageSize,
             take: query.pageSize? Number(query.pageSize): 5,
             where : {
-                petType: query.type? query.type.toLowerCase(): {not: ''},
-                petAge: query.minAge? {gte:Number(query.minAge)}:{not:''},
-                petAge: query.maxAge? {lte:Number(query.maxAge)}:{not:''}
+                petType: query.type? query.type.toLowerCase(): {not:''},
+                petAge: query.minAge? {gte:Number(query.minAge)}:{gte:0},
+                petAge: query.maxAge? {lte:Number(query.maxAge)}:{gte:0},
+                //We always return only published listings in the search
+                published: true
                
             },
         
@@ -89,9 +92,11 @@ async function searchListing(query){
         //Used for pagination totalItems
         const results= await prisma.listing.count({
             where : {
-                petType: query.type? query.type.toLowerCase(): {not: ''},
-                petAge: query.minAge? {gte:Number(query.minAge)}:{not:''},
-                petAge: query.maxAge? {lte:Number(query.maxAge)}:{not:''}
+                petType: query.type? query.type.toLowerCase(): {not:''},
+                petAge: query.minAge? {gte:Number(query.minAge)}:{gte:0},
+                petAge: query.maxAge? {lte:Number(query.maxAge)}:{gte:0},
+                //We always return only published listings in the search
+                published: true
                
             },
         
