@@ -26,4 +26,8 @@ api.use(loginRouter)
 const userSearchRouter= require('./routes/userSearch/userSearch.router')
 api.use(userSearchRouter)
 
+//Form router
+const getForm= require('./routes/form/form.router')
+api.use(getForm)
+
 module.exports= api
