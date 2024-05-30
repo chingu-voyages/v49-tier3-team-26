@@ -22,7 +22,7 @@ applicationRouter.get('/application/:id', httpHandleGetApplicationById)
 
 
 //Get an application by search query
-applicationRouter.get('/application/search', httpHandleApplicationSearch)
+applicationRouter.get('/applications/search', httpHandleApplicationSearch)
 
 
 //Delete an application by id
