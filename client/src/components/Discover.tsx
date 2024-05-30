@@ -1,5 +1,6 @@
 import React from "react"
 import PetCard from "./PetCard"
+import styles from "./Discover.module.css"
 
 interface PetProfile {
     id: string;
@@ -30,11 +31,10 @@ export default function Discover() {
     }, [])
     return (
         <>  
-            <div>
-                <h1>Discover</h1>
-                <img src="" alt="Filter options" />
+            <div className={styles.title}>
+                <h2>Pets available for adoption</h2>
             </div>
-            <div>
+            <div className={styles.cardsContainer}>
                 {data.items ? 
                 data.items.map(( pet :PetProfile ) => {
                 return (<PetCard
