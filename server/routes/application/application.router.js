@@ -17,18 +17,15 @@ applicationRouter.post('/application', httpHandleApplicationCreation);
 //Update an existing application
 applicationRouter.patch('/application/:id', httpHandleApplicationUpdate)
 
-//Get a application by id
+//Get an application by id
 applicationRouter.get('/application/:id', httpHandleGetApplicationById)
 
 
-//Get a application by search query
+//Get an application by search query
 applicationRouter.get('/application/search', httpHandleApplicationSearch)
 
 
-//Get a application by search query
+//Delete an application by id
 applicationRouter.delete('/application/:id', httpHandleApplicationDelete)
-
-
-httpHandleApplicationDelete
 
 module.exports = applicationRouter;

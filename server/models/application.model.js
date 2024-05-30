@@ -4,17 +4,17 @@ const { prisma } = require("../prisma/prismaClient");
 async function newApplication(application) {
   //Check required properties
 
-  // if (
-  //   !application.listingId ||
-  //   !application.form ||
-  //   !application.userId ||
-  //   !application.hasDocuments ||
-  //   !application.status
-  // ) {
-  //   return {
-  //     error: "Missing required properties.",
-  //   };
-  // }
+  if (
+    !application.listingId ||
+    !application.form ||
+    !application.userId ||
+    application.hasDocuments === undefined ||
+    !application.status
+  ) {
+    return {
+      error: "Missing required properties.",
+    };
+  }
   try {
     const newApplication = await prisma.application.create({
       data: {
