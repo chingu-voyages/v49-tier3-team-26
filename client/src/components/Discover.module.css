@@ -1,4 +1,53 @@
-.title {
+.sectionTitle {
+    font-weight: 700;
+    font-size: 25px;
+    line-height: 30px;
+    margin-top: 20px;
+}
+
+.sectionDesc {
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 18px;
+    width: 353px;
+    margin: 20px auto 0;
+}
+
+.filterSection {
+    text-align: center;
+}
+
+.filterBtnsContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 40px 19px;;
+}
+
+.filterBtnsContainer > button {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    height: 85px;
+    width: 85px;
+    align-items: center;
+    justify-content: center;
+    background-color: #D9D9D9;
+    font-family: Lato, 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.filterBtnsContainer > button > image {
+    height: 45px;
+    width: 45px;
+}
+
+.filterBtnsContainer > button > p {
+    width: max-content;
+}
+
+.listingsTitle {
     font-size: 20px;
     font-weight: 700;
     margin: 20px;
