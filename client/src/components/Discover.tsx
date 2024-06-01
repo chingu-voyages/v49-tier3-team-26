@@ -1,4 +1,4 @@
-import React from "react"
+import {useState, useEffect} from "react"
 import PetCard from "./PetCard"
 import FilterButton from "./FilterButton"
 import styles from "./Discover.module.css"
@@ -48,10 +48,10 @@ export default function Discover() {
         }
     ]
 
-    const [data, setData] = React.useState(Object)
-    const [selectedFilterBtn, setSelectedFilterBtn] = React.useState(animalsArray)
+    const [data, setData] = useState(Object)
+    const [selectedFilterBtn, setSelectedFilterBtn] = useState<filterOptions[]>(animalsArray)
 
-    React.useEffect(() => {
+    useEffect(() => {
         async function getData() {
             const response = await 
             fetch("https://pawfect-match-api.onrender.com/v1/listings/search");
@@ -64,8 +64,15 @@ export default function Discover() {
         
         function otherAnimals() {
             if (data.items) {
-                const petTypes = data.items
-                .map((i :PetProfile) => i.petType !== "Dog" && i.petType !== "Cat" ?  i.petType : null)
+
+                let petTypes = []
+                petTypes = data.items.map((i :PetProfile) => {
+                    return i.petType !== "Dog" && 
+                    i.petType !== "Cat" ?  
+                    i.petType : 
+                    null
+                })                
+                
                 setSelectedFilterBtn(prevSelected => { 
                     return prevSelected.map((item) => {
                         if (item.pet === "Other") {
@@ -100,11 +107,12 @@ export default function Discover() {
 
         function filteredPetArray(filterState:any){
             const filteredArray = filterState.map((item :filterOptions) => item.on ? item.pet : "")
-            // filteredArray[2] = selectedFilterBtn[2].includes
+            //Includes is the property not the method:
+            filteredArray[2] = selectedFilterBtn[2].includes
             return filteredArray
         }
 
-        function petBuilder(pet :PetProfile) {
+        function petCardBuilder(pet :PetProfile) {
             return (
                 <PetCard
                     key={pet.id} 
@@ -170,9 +178,11 @@ export default function Discover() {
                 data.items.map((pet: PetProfile) => {
                     if (selectedFilterBtn) {
                       const filteredArray = filteredPetArray(selectedFilterBtn);
-                    
-                      if (filteredArray.includes(pet.petType)) {
-                        return petBuilder(pet);
+                      if ( filteredArray.includes(pet.petType) ) {
+                        return petCardBuilder(pet);
+                      }
+                      else if (filteredArray[2].includes(pet.petType)) {
+                        return petCardBuilder(pet);
                       }
                     } 
                     return null;
