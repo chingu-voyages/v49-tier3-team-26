@@ -26,11 +26,11 @@ interface filterOptions  {
     pet: string,
     selected: boolean,
     on: boolean,
-    includes?: Array<string>,
+    otherTypes?: string[],
 }
 
 export default function Discover() {
-    const animalsArray = [
+    const animalsArray :filterOptions[] = [
         {
         pet: "Dog",
         selected: false,
@@ -47,9 +47,9 @@ export default function Discover() {
         on: true,
         }
     ]
-
-    const [data, setData] = useState(Object)
-    const [selectedFilterBtn, setSelectedFilterBtn] = useState<filterOptions[]>(animalsArray)
+    let filteredPetArray = []
+    const [data, setData] = useState<{ items: PetProfile[] }>({ items: [] });
+    const [filterBtn, setFilterBtn] = useState<filterOptions[]>(animalsArray);
 
     useEffect(() => {
         async function getData() {
@@ -58,37 +58,42 @@ export default function Discover() {
             const animalsForAdoption = await response.json();
             setData(animalsForAdoption);
             
-            otherAnimals()
+            updateOtherAnimals(animalsForAdoption.items)
+            
         }
         getData()
-        
-        function otherAnimals() {
-            if (data.items) {
 
-                let petTypes = []
-                petTypes = data.items.map((i :PetProfile) => {
-                    return i.petType !== "Dog" && 
-                    i.petType !== "Cat" ?  
-                    i.petType : 
-                    null
-                })                
-                
-                setSelectedFilterBtn(prevSelected => { 
-                    return prevSelected.map((item) => {
-                        if (item.pet === "Other") {
-                            return {...item, includes: petTypes}
-                        }
-                        return item
-                    })
-                })
-            }
-        }
         
     }, [])
 
+        useEffect(() => {
+            createFilteredPetArray(filterBtn);
+        }, [filterBtn, data]);
+                
+        function updateOtherAnimals(items: PetProfile[]) {
+
+            let petTypes: string[] = []
+            petTypes = items.map((i) => {
+                    return i.petType !== "Dog" &&
+                        i.petType !== "Cat" ?
+                        i.petType :
+                        null
+                }).filter(Boolean) as string[]; // Ensure petTypes is a string array;
+            
+            setFilterBtn((prevSelected) => { 
+                return prevSelected.map((item) => {
+                    if (item.pet === "Other") {
+                        return {...item, otherTypes: petTypes};
+                    }
+                    return item;
+                });
+            });
+                
+            
+        }
 
         function unselectFilterButton() {
-            setSelectedFilterBtn(prevSelected => { 
+            setFilterBtn(prevSelected => { 
                 return prevSelected.map((item) => {
                     return {...item, selected: false, on: true}
                 })
@@ -96,7 +101,7 @@ export default function Discover() {
         }
 
         function selectFilterButton(selection :string) {
-            setSelectedFilterBtn(prevSelected => { 
+            setFilterBtn(prevSelected => { 
                 return prevSelected.map((item) => {
                     return item.pet === selection ? 
                     {...item, selected: true, on: true} : 
@@ -105,11 +110,11 @@ export default function Discover() {
             })
         }
 
-        function filteredPetArray(filterState:any){
-            const filteredArray = filterState.map((item :filterOptions) => item.on ? item.pet : "")
-            //Includes is the property not the method:
-            filteredArray[2] = selectedFilterBtn[2].includes
-            return filteredArray
+        function createFilteredPetArray(filterState :filterOptions[]): (string | undefined)[] {
+            
+            filteredPetArray = filterState.map((item :any) => item.on ? item.pet : "")
+            filteredPetArray[2] = filterBtn[2].otherTypes            
+            return filteredPetArray
         }
 
         function petCardBuilder(pet :PetProfile) {
@@ -142,8 +147,8 @@ export default function Discover() {
                     <FilterButton 
                         key="Dog"
                         id="Dogs"
-                        selected={selectedFilterBtn[0].selected}
-                        on={selectedFilterBtn[0].on}
+                        selected={filterBtn[0].selected}
+                        on={filterBtn[0].on}
                         handleClick={() => selectFilterButton("Dog")}
                         handleClickWhenSelected={() => unselectFilterButton()}
                         image={Dog}
@@ -151,8 +156,8 @@ export default function Discover() {
                     <FilterButton 
                         key="Cat"
                         id="Cats" 
-                        selected={selectedFilterBtn[1].selected}
-                        on={selectedFilterBtn[1].on}
+                        selected={filterBtn[1].selected}
+                        on={filterBtn[1].on}
                         handleClick={() => selectFilterButton("Cat")}
                         handleClickWhenSelected={() => unselectFilterButton()}
                         image={Cat}
@@ -160,8 +165,8 @@ export default function Discover() {
                     <FilterButton 
                         key="Other"
                         id="Other animals"
-                        selected={selectedFilterBtn[2].selected} 
-                        on={selectedFilterBtn[2].on}
+                        selected={filterBtn[2].selected} 
+                        on={filterBtn[2].on}
                         handleClick={() => selectFilterButton("Other")}
                         handleClickWhenSelected={() => unselectFilterButton()}
                         image={Other}
@@ -176,12 +181,13 @@ export default function Discover() {
             <div className={styles.cardsContainer}>
                 {data.items ? 
                 data.items.map((pet: PetProfile) => {
-                    if (selectedFilterBtn) {
-                      const filteredArray = filteredPetArray(selectedFilterBtn);
+                    if (filterBtn) {
+                      const filteredArray = createFilteredPetArray(filterBtn);
+                      
                       if ( filteredArray.includes(pet.petType) ) {
                         return petCardBuilder(pet);
                       }
-                      else if (filteredArray[2].includes(pet.petType)) {
+                      else if (filteredArray[2]?.includes(pet.petType)) {
                         return petCardBuilder(pet);
                       }
                     } 

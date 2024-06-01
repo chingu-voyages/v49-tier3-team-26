@@ -24,8 +24,8 @@ export default function PetCard( {name, tags, location, type, age} :CardItems ) 
             <div className={styles.desc}>
                 <div className={styles.tags}>
                     {tags && 
-                        tags.split(',').map(tag => (
-                            <div className={styles.tag}>
+                        tags.split(',').map((tag, index) => (
+                            <div key={index} className={styles.tag}>
                                 {tag}
                             </div>
                         ))

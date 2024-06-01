@@ -12,7 +12,6 @@ export default function FilterButton(props: filterProps) {
     const styles = {
         backgroundColor: props.on ? "lightBlue" : "#D9D9D9"
     }
-    console.log(props.id)
     return (
         <button 
         onClick={props.selected ? props.handleClickWhenSelected : props.handleClick} 
