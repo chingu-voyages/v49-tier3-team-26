@@ -8,6 +8,7 @@ import ChatRoom from './components/ChatRoom';
 import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate  } from 'react-router-dom';
+import Discover from './components/Discover';
 
 function App() {
   const { user, loading } = useAuth();
@@ -36,22 +37,20 @@ function App() {
 
   return (
   
-      
-      
-     
-      <div className='app-container'>
+    <div className='app-container'>
       <Header handleLoginShow={handleLoginShow} handleRegisterShow={handleRegisterShow} handleChatClick={handleChatClick} />
       <LoginModal show={showLogin} handleClose={handleLoginClose} />
       <RegisterModal show={showRegister} handleClose={handleRegisterClose} />
-     <div className='main-content'>
+      <div className='main-content'>
       <Routes>
         <Route path="/" element={user ? <Navigate to="/" /> : <div>Welcome, please login or register.</div>} />
         <Route path="/chat" element={user ? <ChatRoom /> : <Navigate to="/" />} />
+        <Route path="/discover" element={<Discover />} />
       </Routes>
-  
-      </div>
-     <Footer />
-      </div>
+
+    </div>
+      <Footer />
+    </div>
     
   )
 }
