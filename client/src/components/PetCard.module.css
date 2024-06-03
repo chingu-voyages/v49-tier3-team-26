@@ -13,8 +13,14 @@ p {
 }
 .img {
     /* background-color: lightcoral; */
-    margin-top: 15px;
     align-self: center;
+
+}
+
+.photo {
+    max-height: 167px;
+    max-width: 100%;
+    object-fit: contain;
 }
 
 .paw {

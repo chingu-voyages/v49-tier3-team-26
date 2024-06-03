@@ -11,15 +11,29 @@ interface CardItems {
     breed: string;
     type: string; 
     age: number;
+    photo: string;
 }
 
-export default function PetCard( {name, tags, location, type, age} :CardItems ) {
+export default function PetCard( {name, tags, location, type, age, photo} :CardItems ) {
     
     return (
         <div className={styles.card}>
             <div className={styles.img}>
-                <img src={type === "Dog" ? dog : cat} alt="animal for adoption" />
-                <img className={styles.paw} src={paw} alt="favorite button" />
+                {photo.includes('https://example.com/photos/') ? 
+                    <img
+                    src={type === "Dog" ? dog : cat} 
+                    alt="animal for adoption" 
+                    /> : 
+                    <img 
+                    className={styles.photo}
+                    src={photo} alt={`Picture of ${name}`} 
+                    /> 
+                }
+                {/* 
+                <img className={styles.photo}
+                src={photo.includes('src/assets/') ? photo : 
+                type === "Dog" ? dog : cat} alt="animal for adoption" />
+                <img className={styles.paw} src={paw} alt="favorite button" /> */}
             </div>
             <div className={styles.desc}>
                 <div className={styles.tags}>

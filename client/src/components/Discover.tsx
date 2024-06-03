@@ -54,7 +54,8 @@ export default function Discover() {
     useEffect(() => {
         async function getData() {
             const response = await 
-            fetch("https://pawfect-match-api.onrender.com/v1/listings/search");
+            fetch("https://pawfect-match-api.onrender.com/v1/listings/search?&pageSize=20");
+            // "https://pawfect-match-api.onrender.com/v1/listings/search"
             const animalsForAdoption = await response.json();
             setData(animalsForAdoption);
             
@@ -122,7 +123,7 @@ export default function Discover() {
                 <PetCard
                     key={pet.id} 
                     name={pet.petName}
-                    // photo={pet.petPhoto}
+                    photo={pet.petPhoto}
                     tags={pet.tags} 
                     breed={pet.petBreed}
                     location={pet.location}
@@ -187,7 +188,10 @@ export default function Discover() {
                       if ( filteredArray.includes(pet.petType) ) {
                         return petCardBuilder(pet);
                       }
-                      else if (filteredArray[2]?.includes(pet.petType)) {
+                      // IF there are other animals in the animals array than cats and dogs
+                      // AND cat or dog buttons are NOT selected, THEN show it.
+                      else if (filteredArray[2]?.includes(pet.petType) &&
+                      !filterBtn[0].selected && !filterBtn[1].selected) {
                         return petCardBuilder(pet);
                       }
                     } 
