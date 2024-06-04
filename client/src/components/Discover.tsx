@@ -55,7 +55,6 @@ export default function Discover() {
         async function getData() {
             const response = await 
             fetch("https://pawfect-match-api.onrender.com/v1/listings/search?&pageSize=10");
-            // "https://pawfect-match-api.onrender.com/v1/listings/search"
             const animalsForAdoption = await response.json();
             setData(animalsForAdoption);
             
@@ -83,6 +82,7 @@ export default function Discover() {
             
             setFilterBtn((prevSelected) => { 
                 return prevSelected.map((item) => {
+                    // for refactoring later => otherTypes: string
                     if (item.pet === "Other") {
                         return {...item, otherTypes: petTypes};
                     }

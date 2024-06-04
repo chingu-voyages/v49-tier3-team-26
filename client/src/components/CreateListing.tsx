@@ -44,8 +44,7 @@ export default function Discover() {
         + formData.petType.slice(1)
 
       };
-    console.log(dataToSend);
-    
+    // move later to /services : api calls post, update, delete...
     async function postListing() {
         const response = await fetch("https://pawfect-match-api.onrender.com/v1/listing", {
             method: "POST",
@@ -91,6 +90,7 @@ export default function Discover() {
                         onChange={event => handleChange(event)}
                         name="petName"
                         value={formData.petName}
+                        required
                     />
                 </label>
                 <label>
@@ -101,6 +101,7 @@ export default function Discover() {
                         onChange={event => handleChange(event)}
                         name="petPhoto"
                         value={formData.petPhoto}
+                        required
                     />
                 </label>
                 <label>
@@ -111,6 +112,7 @@ export default function Discover() {
                         onChange={event => handleChange(event)}
                         name="petType"
                         value={formData.petType}
+                        required
                     />
                 </label>
                 <label>
@@ -131,6 +133,7 @@ export default function Discover() {
                         onChange={event => handleChange(event)}
                         name="petAge"
                         value={formData.petAge}
+                        required
                     />
                 </label>
                 <label>
@@ -141,6 +144,7 @@ export default function Discover() {
                         onChange={event => handleChange(event)}
                         name="location"
                         value={formData.location}
+                        required
                     />
                 </label>
                 <label>
