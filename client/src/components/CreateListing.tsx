@@ -18,6 +18,7 @@ const initialData = {
   }
 
 export default function Discover() {
+    const [statusMsgOnSubmit, setStatusMsgOnSubmit] = useState('')
     const [formData, setFormData] = useState<PetProfile>(initialData)
     // change any later when figure out type of event
     function handleChange(event :any) {
@@ -61,7 +62,16 @@ export default function Discover() {
 
         const result = await response.json();
         console.log("Data posted succesfully", result)
+
+        // For now rendering submit message showing status to DOM
+        result.error ? setStatusMsgOnSubmit(result.error) :
+        result.message ?  setStatusMsgOnSubmit(result.message) : 
+        ""
+        setTimeout(() => {
+            setStatusMsgOnSubmit('')
+        }, 3000);
         }
+
     // change any later when figure out type of event
     function handleSubmit(e: any) {
         e.preventDefault()
@@ -180,11 +190,12 @@ export default function Discover() {
                     // onClick={() => postListing()}
                     >Create new listing
                 </button>
+                {statusMsgOnSubmit && 
                 <div>
                     <p className={styles.submitMsg}>
-                        New Listing added to DB
+                        {statusMsgOnSubmit}
                     </p>
-                </div>
+                </div>}
             </form>
         </div>
     )
