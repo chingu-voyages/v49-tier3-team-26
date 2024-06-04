@@ -1,5 +1,6 @@
 import dog from "../assets/dog.png";
 import cat from "../assets/cat.png";
+import other from "../assets/otherAnimalsBtn.svg"
 import paw from "../assets/favourite-paw.svg";
 import locationPin from "../assets/location-pin.svg"
 import styles from "./PetCard.module.css";
@@ -21,7 +22,8 @@ export default function PetCard( {name, tags, location, type, age, photo} :CardI
             <div className={styles.img}>
                 {photo.includes('https://example.com/photos/') ? 
                     <img
-                    src={type === "Dog" ? dog : cat} 
+                    className={styles.placeholderImg}
+                    src={type === "Dog" ? dog : type === "Cat" ? cat : other} 
                     alt="animal for adoption" 
                     /> : 
                     <img 
@@ -29,6 +31,7 @@ export default function PetCard( {name, tags, location, type, age, photo} :CardI
                     src={photo} alt={`Picture of ${name}`} 
                     /> 
                 }
+                <img className={styles.paw} src={paw} alt="Add to favourites" />
             </div>
             <div className={styles.desc}>
                 <div className={styles.tags}>

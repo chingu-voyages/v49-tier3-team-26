@@ -1,4 +1,20 @@
 input {
+    /* display: block; */
+    margin: 10px;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.formContainer {
+    padding-top: 20px;
+}
+
+.submitBtn {
     display: block;
-    margin: 15px;
+    margin: 20px 20px 20px auto;
+    background-color: aqua;
 }

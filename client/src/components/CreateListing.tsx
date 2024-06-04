@@ -1,23 +1,25 @@
 import { useState, } from "react"
 import { PetProfile } from "./Discover"
+import styles from "./CreateListing.module.css"
+import { v4 as uuidv4 } from 'uuid';
+
+const initialData = {
+    id: uuidv4(),
+    petName: "",
+    petPhoto: "",
+    petType: "",
+    petBreed: "",
+    petAge: 1,
+    location: "",
+    description: "",
+    tags: "",
+    userId: "4992d8fe-9dee-48c7-90d2-07b3c1278145",
+    published: false,
+  }
 
 export default function Discover() {
-    const [formData, setFormData] = useState<PetProfile>(
-        {
-        id: "",
-        petName: "",
-        petPhoto: "",
-        petType: "",
-        petBreed: "",
-        petAge: 0,
-        location: "",
-        description: "",
-        tags: "",
-        userId: "",
-        published: false,
-      }
-    )
-
+    const [formData, setFormData] = useState<PetProfile>(initialData)
+    // change any later when figure out type of event
     function handleChange(event :any) {
         setFormData( (prevFormData :PetProfile) => {
             return {
@@ -30,12 +32,19 @@ export default function Discover() {
     }
 
     // Ensuring petAge gets passed as a number to the API
+    // Ensuring petType has a capitalized first letter for filters to work properly
     const dataToSend = {
         ...formData,
-        petAge: typeof formData.petAge !== "number" ? 
-        parseInt(formData.petAge, 10) : formData.petAge
-      };
 
+        petAge: typeof formData.petAge !== "number" ? 
+        parseInt(formData.petAge, 10) : formData.petAge,
+
+        petType: formData.petType.charAt(0).toUpperCase() 
+        + formData.petType.slice(1)
+
+      };
+    console.log(dataToSend);
+    
     async function postListing() {
         const response = await fetch("https://pawfect-match-api.onrender.com/v1/listing", {
             method: "POST",
@@ -52,22 +61,18 @@ export default function Discover() {
 
         const result = await response.json();
         console.log("Data posted succesfully", result)
-        }   
+        }
+    // change any later when figure out type of event
+    function handleSubmit(e: any) {
+        e.preventDefault()
+        postListing()
+        setFormData(initialData)
+    }
 
     return (
-        <>
+        <div className={styles.formContainer}>
             <h2>New Listing</h2>
-            <form onSubmit={e => {e.preventDefault()}}>
-                <label>
-                ID
-                <input 
-                    type="text"
-                    placeholder="ID"
-                    onChange={event => handleChange(event)}
-                    name="id"
-                    value={formData.id}
-                    />
-                </label>
+            <form onSubmit={e => handleSubmit(e)}>
                 <label>
                     Pet Name
                     <input 
@@ -109,7 +114,7 @@ export default function Discover() {
                     />
                 </label>
                 <label>
-                    Pet Age
+                    Pet Age (Min = 1)
                     <input 
                         type="number"
                         placeholder="Pet Age"
@@ -154,25 +159,33 @@ export default function Discover() {
                         type="checkbox"
                         placeholder="Published"
                         onChange={event => handleChange(event)}
-                        name="isPublished"
+                        name="published"
                         checked={formData.published}
                     />
                 </label>
                 <label>
                     User ID
-                    <input 
+                    <input  
                         type="text"
-                        placeholder="User ID"
-                        onChange={event => handleChange(event)}
+                        placeholder="User Id"
+                        // onChange={event => handleChange(event)}
                         name="userId"
+                        disabled={true}
+                        value={formData.userId}
                     />
                 </label>
-                <button 
-                    type="button" 
-                    onClick={() => postListing()}
+                <button
+                    className={styles.submitBtn} 
+                    type="submit" 
+                    // onClick={() => postListing()}
                     >Create new listing
                 </button>
+                <div>
+                    <p className={styles.submitMsg}>
+                        New Listing added to DB
+                    </p>
+                </div>
             </form>
-        </>
+        </div>
     )
 }
