@@ -29,11 +29,6 @@ export default function PetCard( {name, tags, location, type, age, photo} :CardI
                     src={photo} alt={`Picture of ${name}`} 
                     /> 
                 }
-                {/* 
-                <img className={styles.photo}
-                src={photo.includes('src/assets/') ? photo : 
-                type === "Dog" ? dog : cat} alt="animal for adoption" />
-                <img className={styles.paw} src={paw} alt="favorite button" /> */}
             </div>
             <div className={styles.desc}>
                 <div className={styles.tags}>
