@@ -8,13 +8,23 @@
     justify-content: space-between;
     position: relative;
 }
+
 p {
     margin: 0;
 }
+
 .img {
-    /* background-color: lightcoral; */
-    margin-top: 15px;
     align-self: center;
+}
+
+.placeholderImg {
+    margin-top: 10px;
+    width: 150px;
+}
+
+.photo {
+    max-height: 167px;
+    max-width: 100%;
 }
 
 .paw {
