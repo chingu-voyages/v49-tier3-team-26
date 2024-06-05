@@ -1,56 +1,23 @@
 import {useState, useEffect} from "react"
+
 import PetCard from "./PetCard"
 import FilterButton from "./FilterButton"
+
 import styles from "./Discover.module.css"
+import { filterOptions, PetProfile } from "../types"
+import { animalsArray } from "../data/createListingData"
+
 import Dog from "../assets/dogBtn.svg"
 import Cat from "../assets/catBtn.svg"
 import Other from "../assets/otherAnimalsBtn.svg"
 
-export interface PetProfile {
-    id: string;
-    petName: string;
-    petPhoto: string;
-    petType: string;
-    petBreed: string;
-    petAge: number;
-    location: string;
-    description: string;
-    tags: string;
-    creationTimestamp?: string;
-    lastUpdateTimestamp?: string;
-    published: boolean;
-    userId: string;
-  }
-
-interface filterOptions  {
-    pet: string,
-    selected: boolean,
-    on: boolean,
-    otherTypes?: string[],
-}
-
 export default function Discover() {
-    const animalsArray :filterOptions[] = [
-        {
-        pet: "Dog",
-        selected: false,
-        on: true
-        },
-        {
-        pet: "Cat",
-        selected: false,
-        on: true
-        },
-        {
-        pet: "Other",
-        selected: false,
-        on: true,
-        }
-    ]
+
     let filteredPetArray = []
     const [data, setData] = useState<{ items: PetProfile[] }>({ items: [] });
     const [filterBtn, setFilterBtn] = useState<filterOptions[]>(animalsArray);
 
+//services?
     useEffect(() => {
         async function getData() {
             const response = await 
@@ -62,77 +29,71 @@ export default function Discover() {
             
         }
         getData()
-
-        
     }, [])
 
-        useEffect(() => {
-            createFilteredPetArray(filterBtn);
-        }, [filterBtn, data]);
-                
-        function updateOtherAnimals(items: PetProfile[]) {
-
-            let petTypes: string[] = []
-            petTypes = items.map((i) => {
-                    return i.petType !== "Dog" &&
-                        i.petType !== "Cat" ?
-                        i.petType :
-                        null
-                }).filter(Boolean) as string[]; // Ensure petTypes is a string array;
+    function createFilteredPetArray(filterState :filterOptions[]): (string | undefined)[] {
             
-            setFilterBtn((prevSelected) => { 
-                return prevSelected.map((item) => {
-                    // for refactoring later => otherTypes: string
-                    if (item.pet === "Other") {
-                        return {...item, otherTypes: petTypes};
-                    }
-                    return item;
-                });
-            });
-                
+        filteredPetArray = filterState.map((item :any) => item.on ? item.pet : "")
+        filteredPetArray[2] = filterBtn[2].otherTypes            
+        return filteredPetArray
+    }
+
+    useEffect(() => {
+        createFilteredPetArray(filterBtn);
+    }, [filterBtn, data]);
             
-        }
+    function updateOtherAnimals(items: PetProfile[]) {
 
-        function unselectFilterButton() {
-            setFilterBtn(prevSelected => { 
-                return prevSelected.map((item) => {
-                    return {...item, selected: false, on: true}
-                })
-            })
-        }
-
-        function selectFilterButton(selection :string) {
-            setFilterBtn(prevSelected => { 
-                return prevSelected.map((item) => {
-                    return item.pet === selection ? 
-                    {...item, selected: true, on: true} : 
-                    {...item, selected: false, on: false}
-                })
-            })
-        }
-
-        function createFilteredPetArray(filterState :filterOptions[]): (string | undefined)[] {
-            
-            filteredPetArray = filterState.map((item :any) => item.on ? item.pet : "")
-            filteredPetArray[2] = filterBtn[2].otherTypes            
-            return filteredPetArray
-        }
-
-        function petCardBuilder(pet :PetProfile) {
-            return (
-                <PetCard
-                    key={pet.id} 
-                    name={pet.petName}
-                    photo={pet.petPhoto}
-                    tags={pet.tags} 
-                    breed={pet.petBreed}
-                    location={pet.location}
-                    type={pet.petType}
-                    age={pet.petAge}
-                />)
-        }
+        let petTypes: string[] = []
+        petTypes = items.map((i) => {
+                return i.petType !== "Dog" &&
+                    i.petType !== "Cat" ?
+                    i.petType :
+                    null
+            }).filter(Boolean) as string[]; // Ensure petTypes is a string array;
         
+        setFilterBtn((prevSelected) => { 
+            return prevSelected.map((item) => {
+                if (item.pet === "Other") {
+                    return {...item, otherTypes: petTypes};
+                }
+                return item;
+            });
+        });
+    }
 
+    function unselectFilterButton() {
+        setFilterBtn(prevSelected => { 
+            return prevSelected.map((item) => {
+                return {...item, selected: false, on: true}
+            })
+        })
+    }
+
+    function selectFilterButton(selection :string) {
+        setFilterBtn(prevSelected => { 
+            return prevSelected.map((item) => {
+                return item.pet === selection ? 
+                {...item, selected: true, on: true} : 
+                {...item, selected: false, on: false}
+            })
+        })
+    }
+
+    function petCardBuilder(pet :PetProfile) {
+        return (
+            <PetCard
+                key={pet.id} 
+                name={pet.petName}
+                photo={pet.petPhoto}
+                tags={pet.tags} 
+                breed={pet.petBreed}
+                location={pet.location}
+                type={pet.petType}
+                age={pet.petAge}
+            />)
+    }
+        
     return (
         <>  
             <div className={styles.filterSection}>
@@ -188,6 +149,7 @@ export default function Discover() {
                       if ( filteredArray.includes(pet.petType) ) {
                         return petCardBuilder(pet);
                       }
+                      
                       // IF there are other animals in the animals array than cats and dogs
                       // AND cat or dog buttons are NOT selected, THEN show it.
                       else if (filteredArray[2]?.includes(pet.petType) &&

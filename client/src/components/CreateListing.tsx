@@ -1,33 +1,22 @@
 import { useState, } from "react"
-import { PetProfile } from "./Discover"
-import styles from "./CreateListing.module.css"
-import { v4 as uuidv4 } from 'uuid';
+import { PetProfile } from "../types"
+import { initialData } from "../data/createListingData"
 
-const initialData = {
-    id: uuidv4(),
-    petName: "",
-    petPhoto: "",
-    petType: "",
-    petBreed: "",
-    petAge: 1,
-    location: "",
-    description: "",
-    tags: "",
-    userId: "4992d8fe-9dee-48c7-90d2-07b3c1278145",
-    published: false,
-  }
+import styles from "./CreateListing.module.css"
 
 export default function Discover() {
+    
     const [statusMsgOnSubmit, setStatusMsgOnSubmit] = useState('')
     const [formData, setFormData] = useState<PetProfile>(initialData)
+
     // change any later when figure out type of event
     function handleChange(event :any) {
         setFormData( (prevFormData :PetProfile) => {
             return {
                 ...prevFormData,
                 [event.target.name]: event.target.type === 'checkbox' ? 
-                event.target.checked : 
-                event.target.value
+                                     event.target.checked : 
+                                     event.target.value
             }
         })
     }
@@ -35,16 +24,18 @@ export default function Discover() {
     // Ensuring petAge gets passed as a number to the API
     // Ensuring petType has a capitalized first letter for filters to work properly
     const dataToSend = {
+
         ...formData,
 
         petAge: typeof formData.petAge !== "number" ? 
-        parseInt(formData.petAge, 10) : formData.petAge,
+        parseInt(formData.petAge, 10) : 
+        formData.petAge,
 
-        petType: formData.petType.charAt(0).toUpperCase() 
-        + formData.petType.slice(1)
+        petType: formData.petType.charAt(0).toUpperCase() + 
+        formData.petType.slice(1)
+    };
 
-      };
-    // move later to /services : api calls post, update, delete...
+    // move later to /services? : api calls post, update, delete...
     async function postListing() {
         const response = await fetch("https://pawfect-match-api.onrender.com/v1/listing", {
             method: "POST",
@@ -62,14 +53,14 @@ export default function Discover() {
         const result = await response.json();
         console.log("Data posted succesfully", result)
 
-        // For now rendering submit message showing status to DOM
+        // For now rendering submit message and showing status in the DOM
         result.error ? setStatusMsgOnSubmit(result.error) :
         result.message ?  setStatusMsgOnSubmit(result.message) : 
         ""
         setTimeout(() => {
             setStatusMsgOnSubmit('')
         }, 3000);
-        }
+    }
 
     // change any later when figure out type of event
     function handleSubmit(e: any) {
@@ -184,14 +175,13 @@ export default function Discover() {
                         placeholder="User Id"
                         // onChange={event => handleChange(event)}
                         name="userId"
-                        disabled={true}
                         value={formData.userId}
+                        disabled
                     />
                 </label>
                 <button
                     className={styles.submitBtn} 
                     type="submit" 
-                    // onClick={() => postListing()}
                     >Create new listing
                 </button>
                 {statusMsgOnSubmit && 
