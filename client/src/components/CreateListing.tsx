@@ -3,6 +3,7 @@ import { PetProfile } from "../types"
 import { initialData } from "../data/createListingData"
 
 import styles from "./CreateListing.module.css"
+import { postData } from "../services/api-calls"
 
 export default function Discover() {
     
@@ -23,7 +24,7 @@ export default function Discover() {
 
     // Ensuring petAge gets passed as a number to the API
     // Ensuring petType has a capitalized first letter for filters to work properly
-    const dataToSend = {
+    const dataToSend :PetProfile = {
 
         ...formData,
 
@@ -36,36 +37,32 @@ export default function Discover() {
     };
 
     // move later to /services? : api calls post, update, delete...
-    async function postListing() {
-        const response = await fetch("https://pawfect-match-api.onrender.com/v1/listing", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataToSend)
-        })
+    async function postListing(data :PetProfile) {
 
+        const response = await postData(data)
+        
         if(!response.ok) {
-            console.error('Failed to post data', response.statusText);
-            return;
+            console.log('Failed to post data', response.status);
+            setStatusMsgOnSubmit(`Failed to post data: ${String(response.status)}`)
         }
 
-        const result = await response.json();
-        console.log("Data posted succesfully", result)
-
-        // For now rendering submit message and showing status in the DOM
-        result.error ? setStatusMsgOnSubmit(result.error) :
-        result.message ?  setStatusMsgOnSubmit(result.message) : 
-        ""
-        setTimeout(() => {
-            setStatusMsgOnSubmit('')
-        }, 3000);
+        else {
+            const result =  await response.json()
+            console.log("Data posted succesfully", result)
+    
+            result.error ? setStatusMsgOnSubmit(result.error) :
+            result.message ?  setStatusMsgOnSubmit(result.message) : 
+            ""
+            setTimeout(() => {
+                setStatusMsgOnSubmit('')
+            }, 3000);
+        }
     }
 
     // change any later when figure out type of event
     function handleSubmit(e: any) {
         e.preventDefault()
-        postListing()
+        postListing(dataToSend)
         setFormData(initialData)
     }
 
@@ -81,7 +78,7 @@ export default function Discover() {
                         onChange={event => handleChange(event)}
                         name="petName"
                         value={formData.petName}
-                        required
+                        // required
                     />
                 </label>
                 <label>
@@ -92,7 +89,7 @@ export default function Discover() {
                         onChange={event => handleChange(event)}
                         name="petPhoto"
                         value={formData.petPhoto}
-                        required
+                        // required
                     />
                 </label>
                 <label>
@@ -103,7 +100,7 @@ export default function Discover() {
                         onChange={event => handleChange(event)}
                         name="petType"
                         value={formData.petType}
-                        required
+                        // required
                     />
                 </label>
                 <label>
@@ -124,7 +121,7 @@ export default function Discover() {
                         onChange={event => handleChange(event)}
                         name="petAge"
                         value={formData.petAge}
-                        required
+                        // required
                     />
                 </label>
                 <label>
@@ -135,7 +132,7 @@ export default function Discover() {
                         onChange={event => handleChange(event)}
                         name="location"
                         value={formData.location}
-                        required
+                        // required
                     />
                 </label>
                 <label>

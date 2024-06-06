@@ -10,6 +10,7 @@ import { animalsArray } from "../data/createListingData"
 import Dog from "../assets/dogBtn.svg"
 import Cat from "../assets/catBtn.svg"
 import Other from "../assets/otherAnimalsBtn.svg"
+import { getData } from "../services/api-calls"
 
 export default function Discover() {
 
@@ -19,16 +20,24 @@ export default function Discover() {
 
 //services?
     useEffect(() => {
-        async function getData() {
-            const response = await 
-            fetch("https://pawfect-match-api.onrender.com/v1/listings/search?&pageSize=10");
-            const animalsForAdoption = await response.json();
-            setData(animalsForAdoption);
-            
-            updateOtherAnimals(animalsForAdoption.items)
-            
+        async function retrieveData() {
+            const retrievedData = await getData()
+            setData(retrievedData)
+            updateOtherAnimals(retrievedData.items)
         }
-        getData()
+        retrieveData()
+        
+        // async function getData() {
+        //     const response = await 
+        //     fetch("https://pawfect-match-api.onrender.com/v1/listings/search?&pageSize=10");
+        //     const animalsForAdoption = await response.json();
+        //     return animalsForAdoption
+        //     setData(animalsForAdoption);
+            
+        //     updateOtherAnimals(animalsForAdoption.items)
+            
+        // }
+        // getData()
     }, [])
 
     function createFilteredPetArray(filterState :filterOptions[]): (string | undefined)[] {
@@ -46,11 +55,11 @@ export default function Discover() {
 
         let petTypes: string[] = []
         petTypes = items.map((i) => {
-                return i.petType !== "Dog" &&
-                    i.petType !== "Cat" ?
-                    i.petType :
-                    null
-            }).filter(Boolean) as string[]; // Ensure petTypes is a string array;
+            return i.petType !== "Dog" &&
+                i.petType !== "Cat" ?
+                i.petType :
+                null
+        }).filter(Boolean) as string[]; // Ensure petTypes is a string array;
         
         setFilterBtn((prevSelected) => { 
             return prevSelected.map((item) => {
