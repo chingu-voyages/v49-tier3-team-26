@@ -10,6 +10,7 @@ import RegisterModal from './components/RegisterModal';
 import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate  } from 'react-router-dom';
 import Discover from './components/Discover';
 import CreateListing from './components/CreateListing'
+import PetPage from './components/PetPage';
 
 function App() {
   const { user, loading } = useAuth();
@@ -48,6 +49,7 @@ function App() {
         <Route path="/chat" element={user ? <ChatRoom /> : <Navigate to="/" />} />
         <Route path="/discover" element={<Discover />} />
         <Route path="/new-listing" element={<CreateListing />} />
+        <Route path="/listing/:id" element={<PetPage />} />
       </Routes>
 
     </div>

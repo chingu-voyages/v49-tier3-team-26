@@ -34,6 +34,7 @@ export interface filterOptions  {
 
 
 export interface CardItems {
+  id: string;
   name: string; 
   tags: string;
   location: string; 
