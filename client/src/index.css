@@ -66,3 +66,15 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
+/* Change place later */
+.tag {
+  width: fit-content;
+  height: 16px;
+  font-size: 10px;
+  color: white;
+  background-color: #C6C6C6;
+  min-width:fit-content;
+  padding: 0 5px;
+  border-radius: 5px;
+}

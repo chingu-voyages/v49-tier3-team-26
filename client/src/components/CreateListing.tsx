@@ -2,7 +2,7 @@ import { useState, } from "react"
 import { PetProfile } from "../types"
 import { createListingInitialData } from "../data/listingsData"
 
-import styles from "./CreateListing.module.css"
+import styles from "./createListing.module.css"
 import { postNewListing } from "../services/api-calls"
 
 export default function Discover() {

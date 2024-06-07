@@ -80,7 +80,8 @@ export default function Discover() {
     function petCardBuilder(pet :PetProfile) {
         return (
             <PetCard
-                key={pet.id} 
+                key={pet.id}
+                id={pet.id} 
                 name={pet.petName}
                 photo={pet.petPhoto}
                 tags={pet.tags} 

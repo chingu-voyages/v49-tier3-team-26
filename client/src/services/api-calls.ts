@@ -17,6 +17,11 @@ export async function getListings():Promise<{ items: PetProfile[] }> {
     }
 }
 
+export async function getSingleListing(id :string):Promise<PetProfile> {
+        const response = await fetch(`${baseUrl}/listing/${id}`);
+        return await response.json();
+}
+
 export async function postNewListing(data :PetProfile):Promise<Response> {
     const response = await fetch(`${baseUrl}/listing`, {
         method: "POST",
