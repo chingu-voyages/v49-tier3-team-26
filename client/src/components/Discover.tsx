@@ -5,41 +5,29 @@ import FilterButton from "./FilterButton"
 
 import styles from "./Discover.module.css"
 import { filterOptions, PetProfile } from "../types"
-import { animalsArray } from "../data/createListingData"
+import { filterListingOptionsArray } from "../data/listingsData"
 
 import Dog from "../assets/dogBtn.svg"
 import Cat from "../assets/catBtn.svg"
 import Other from "../assets/otherAnimalsBtn.svg"
-import { getData } from "../services/api-calls"
+import { getListings } from "../services/api-calls"
 
 export default function Discover() {
 
     let filteredPetArray = []
     const [data, setData] = useState<{ items: PetProfile[] }>({ items: [] });
-    const [filterBtn, setFilterBtn] = useState<filterOptions[]>(animalsArray);
+    const [filterBtn, setFilterBtn] = useState<filterOptions[]>(filterListingOptionsArray);
 
-//services?
     useEffect(() => {
         async function retrieveData() {
-            const retrievedData = await getData()
+            const retrievedData = await getListings()
             setData(retrievedData)
             updateOtherAnimals(retrievedData.items)
         }
         retrieveData()
-        
-        // async function getData() {
-        //     const response = await 
-        //     fetch("https://pawfect-match-api.onrender.com/v1/listings/search?&pageSize=10");
-        //     const animalsForAdoption = await response.json();
-        //     return animalsForAdoption
-        //     setData(animalsForAdoption);
-            
-        //     updateOtherAnimals(animalsForAdoption.items)
-            
-        // }
-        // getData()
     }, [])
 
+    //Shelter user is given the right to write any animal into input
     function createFilteredPetArray(filterState :filterOptions[]): (string | undefined)[] {
             
         filteredPetArray = filterState.map((item :any) => item.on ? item.pet : "")
@@ -160,9 +148,11 @@ export default function Discover() {
                       }
                       
                       // IF there are other animals in the animals array than cats and dogs
-                      // AND cat or dog buttons are NOT selected, THEN show it.
-                      else if (filteredArray[2]?.includes(pet.petType) &&
-                      !filterBtn[0].selected && !filterBtn[1].selected) {
+                      // AND Cat AND Dog buttons are NOT selected, THEN show it.
+                      else if (
+                        filteredArray[2]?.includes(pet.petType) &&
+                        !filterBtn[0].selected && 
+                        !filterBtn[1].selected) {
                         return petCardBuilder(pet);
                       }
                     } 

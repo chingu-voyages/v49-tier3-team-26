@@ -1,10 +1,12 @@
 import { PetProfile } from "../types";
 
-export async function getData():Promise<{ items: PetProfile[] }> {
+const baseUrl = "https://pawfect-match-api.onrender.com/v1"
+
+export async function getListings():Promise<{ items: PetProfile[] }> {
 
     try {
         const response = await 
-        fetch("https://pawfect-match-api.onrender.com/v1/listings/search?&pageSize=10");
+        fetch(`${baseUrl}/listings/search?&pageSize=10`);
         const animalsForAdoption = await response.json();
         return animalsForAdoption
     }
@@ -15,9 +17,21 @@ export async function getData():Promise<{ items: PetProfile[] }> {
     }
 }
 
-export async function postData(data :PetProfile):Promise<Response> {
-    const response = await fetch("https://pawfect-match-api.onrender.com/v1/listinga", {
+export async function postNewListing(data :PetProfile):Promise<Response> {
+    const response = await fetch(`${baseUrl}/listing`, {
         method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
+        },
+        body: JSON.stringify(data)
+    })
+    return response
+}
+
+export async function updateListing(data :PetProfile):Promise<Response> {
+    const response = await fetch(`${baseUrl}/listing/${data.id}`, {
+        method: "PATCH",
         headers: {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*"

@@ -1,14 +1,14 @@
 import { useState, } from "react"
 import { PetProfile } from "../types"
-import { initialData } from "../data/createListingData"
+import { createListingInitialData } from "../data/listingsData"
 
 import styles from "./CreateListing.module.css"
-import { postData } from "../services/api-calls"
+import { postNewListing } from "../services/api-calls"
 
 export default function Discover() {
     
     const [statusMsgOnSubmit, setStatusMsgOnSubmit] = useState('')
-    const [formData, setFormData] = useState<PetProfile>(initialData)
+    const [formData, setFormData] = useState<PetProfile>(createListingInitialData)
 
     // change any later when figure out type of event
     function handleChange(event :any) {
@@ -37,9 +37,9 @@ export default function Discover() {
     };
 
     // move later to /services? : api calls post, update, delete...
-    async function postListing(data :PetProfile) {
+    async function retriveResponseFromPostListing(data :PetProfile) {
 
-        const response = await postData(data)
+        const response = await postNewListing(data)
         
         if(!response.ok) {
             console.log('Failed to post data', response.status);
@@ -62,8 +62,8 @@ export default function Discover() {
     // change any later when figure out type of event
     function handleSubmit(e: any) {
         e.preventDefault()
-        postListing(dataToSend)
-        setFormData(initialData)
+        retriveResponseFromPostListing(dataToSend)
+        setFormData(createListingInitialData)
     }
 
     return (

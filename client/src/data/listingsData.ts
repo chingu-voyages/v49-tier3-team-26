@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { filterOptions, } from "../types"
 
-export const initialData = {
+export const createListingInitialData = {
     id: uuidv4(),
     petName: "",
     petPhoto: "",
@@ -15,7 +15,7 @@ export const initialData = {
     published: false,
   }
   
-export const animalsArray :filterOptions[] = [
+export const filterListingOptionsArray :filterOptions[] = [
     {
     pet: "Dog",
     selected: false,
