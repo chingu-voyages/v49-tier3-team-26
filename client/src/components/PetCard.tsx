@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 export default function PetCard( {id, name, tags, location, type, age, photo} :CardItems ) {
     
     return (
-        <Link to={`./listing/${id}`}>
+        <Link to={id}>
             <div className={styles.card}>
                 <div className={styles.img}>
                     {photo.includes('https://example.com/photos/') ? 

@@ -49,7 +49,7 @@ function App() {
         <Route path="/chat" element={user ? <ChatRoom /> : <Navigate to="/" />} />
         <Route path="/discover" element={<Discover />} />
         <Route path="/new-listing" element={<CreateListing />} />
-        <Route path="/listing/:id" element={<PetPage />} />
+        <Route path="/discover/:id" element={<PetPage />} />
       </Routes>
 
     </div>
