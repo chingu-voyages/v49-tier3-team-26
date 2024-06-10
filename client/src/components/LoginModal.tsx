@@ -15,9 +15,13 @@ function LoginModal({ show, handleClose }: LoginModalProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    try{
     await login(username, password);
     handleClose();
-  };
+  }catch (error) {
+    console.error('Login failed:', error);
+  }
+};
 
   return (
     <Modal show={show} onHide={handleClose}>

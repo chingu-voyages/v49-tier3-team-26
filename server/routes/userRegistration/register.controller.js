@@ -1,11 +1,14 @@
+const { createUser } = require("../../models/user.model");
 
-const {createUser}= require('../../models/user.model')
+async function httpHandleUserRegistration(req, res) {
+  const { email, password, role } = req.body;
+  const result = await createUser(email, password, role);
+  if (result.error) {
+    return res.status(400).json(result);
+  }
+  return res.status(201).json(result);
+}
 
-async function httpHandleUserRegistration(req, res){
-    const handleUserRegistration= await createUser(req.body.username, req.body.password, req.body.role)
-    return res.json(handleUserRegistration)
- }
- 
- module.exports = {
-    httpHandleUserRegistration,
- }
+module.exports = {
+  httpHandleUserRegistration,
+};

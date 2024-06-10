@@ -1,44 +1,50 @@
 import { createContext, useState, useEffect, useContext, ReactNode } from 'react';
-import axios from 'axios';
 
-interface Adopter {
-  id: string;
-  email: string;
-  role: string;
-}
 
-interface Shelter extends Adopter {
-  email: string;
-}
+
+interface Adopter {}
+
+interface Shelter extends Adopter {}
 
 interface AuthContextProps {
   user: Adopter | null;
   admins: Shelter[];
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, role: string) => Promise<void>;
+  login: (email: string, password: string, ) => Promise<void>;
+  register: (email: string, password: string, role: string, onSuccess: (message: string) => void) => Promise<void>;
   logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<Adopter | null>(null);
+  const [user, setUser] = useState<Adopter | null>(() => {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
   const [admins, setAdmins] = useState<Shelter[]>([]);
   const [loading, setLoading] = useState(true);
+ 
 
   useEffect(() => {
     const fetchUser = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get('https://pawfect-match-api.onrender.com/v1/user/search?role=adopter', { withCredentials: true });
+        const response = await fetch('http://localhost:8000/v1/auth/user', { credentials: 'include' });
+        if (response.ok) {
+          const data = await response.json();
+          setUser(data)
+          localStorage.setItem('user', JSON.stringify(data));
         
-        if (response.data && response.data.length > 0) {
-          setUser(response.data[0]); // Ensure we set only one user object
-        } else {
-          setUser(null);
-        }
+          } else {
+            setUser(null);
+            localStorage.removeItem('user');
+          }
+       
       } catch (error) {
-        console.error('No user logged in:', error);
+       
+        setUser(null)
+        localStorage.removeItem('user');
       } finally {
         setLoading(false);
       }
@@ -46,11 +52,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const fetchAdmins = async () => {
       try {
-        const response = await axios.get('https://pawfect-match-api.onrender.com/v1/user/search?role=shelter', { withCredentials: true });
-       
-        setAdmins(response.data);
+        const response = await fetch('http://localhost:8000/v1/user/search?role=shelter', { credentials: 'include' });
+        if (response.ok) {
+          const data = await response.json();
+          setAdmins(data);
+        } else {
+          setAdmins([]);
+        }
       } catch (error) {
-        console.error('Failed to fetch admins:', error);
+       
+        setAdmins([]);
       }
     };
 
@@ -58,22 +69,50 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     fetchAdmins();
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, ) => {
     try {
-      const response = await axios.post('https://pawfect-match-api.onrender.com/v1/user/login', { email, password }, { withCredentials: true });
-      
-      setUser(response.data.user); 
+      const response = await fetch('http://localhost:8000/v1/user/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ email, password })
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+       
+        const user = {
+          id: responseData.data.userId,
+          email: responseData.data.username,
+          role: responseData.data.role
+        };
+        setUser(user); 
+         localStorage.setItem('user', JSON.stringify(user));
+      } else {
+        const errorData = await response.json();
+        console.error('Login failed:', errorData);
+      }
     } catch (error) {
       console.error('Login failed:', error);
-      if (axios.isAxiosError(error)) {
-        console.error('Axios error details:', error.response?.data || error.message);
-      }
     }
   };
 
-  const register = async (email: string, password: string, role: string) => {
+  const register = async (email: string, password: string, role: string, onSuccess: (message: string) => void) => {
     try {
-      await axios.post('https://pawfect-match-api.onrender.com/v1/user', { email, password, role });
+      const response = await fetch('http://localhost:8000/v1/user/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role })
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        onSuccess(responseData.message); 
+       
+      } else{
+        const errorData = await response.json();
+        console.error('Registration failed:', errorData);
+      }
     } catch (error) {
       console.error('Registration failed:', error);
     }
@@ -81,9 +120,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = async () => {
     try {
-      const response = await axios.post('https://pawfect-match-api.onrender.com/v1/user/logout', {}, { withCredentials: true });
-      console.log('Logout response:', response.data); // Log the response
-      setUser(null);
+     
+      const response = await fetch('http://localhost:8000/v1/user/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+       setUser(null);     
+
+      }
     } catch (error) {
       console.error('Logout failed:', error);
     }

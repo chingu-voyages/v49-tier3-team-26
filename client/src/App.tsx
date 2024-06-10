@@ -1,21 +1,23 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css'
 import {useState} from 'react';
-import { AuthProvider, useAuth } from './AuthContext';
+import { useAuth } from './AuthContext';
 import  Header from './components/Header'
 import Footer from './components/Footer'
 import ChatRoom from './components/ChatRoom';
 import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';
-import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate  } from 'react-router-dom';
+import {Route, Routes, Navigate , useNavigate} from 'react-router-dom';
 import Discover from './components/Discover';
+
 
 function App() {
   const { user, loading } = useAuth();
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
+
   const navigate = useNavigate();
+ 
 
   if (loading) return <div>Loading...</div>;
 
@@ -28,9 +30,10 @@ function App() {
 
   const handleChatClick = () => {
     if (user) {
-     setIsChatOpen(!isChatOpen)
      navigate('/chat')
+    
     } else {
+      console.log('User is not logged in, showing login modal');
       setShowLogin(true)
     }
   };
@@ -40,12 +43,13 @@ function App() {
     <div className='app-container'>
       <Header handleLoginShow={handleLoginShow} handleRegisterShow={handleRegisterShow} handleChatClick={handleChatClick} />
       <LoginModal show={showLogin} handleClose={handleLoginClose} />
-      <RegisterModal show={showRegister} handleClose={handleRegisterClose} />
+      <RegisterModal show={showRegister} handleClose={handleRegisterClose} handleLoginShow={handleLoginShow} />
       <div className='main-content'>
       <Routes>
         <Route path="/" element={user ? <Navigate to="/" /> : <div>Welcome, please login or register.</div>} />
         <Route path="/chat" element={user ? <ChatRoom /> : <Navigate to="/" />} />
         <Route path="/discover" element={<Discover />} />
+        
       </Routes>
 
     </div>
@@ -54,12 +58,6 @@ function App() {
     
   )
 }
-const AppWrapper = () => (
-  <AuthProvider>
-    <Router>
-        <App />
-      </Router>
-  </AuthProvider>
-);
 
-export default AppWrapper
+
+export default App

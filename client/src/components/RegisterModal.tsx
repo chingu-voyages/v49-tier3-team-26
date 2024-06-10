@@ -2,21 +2,27 @@ import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useAuth } from '../AuthContext';
 
+
+
 interface RegisterModalProps {
   show: boolean;
   handleClose: () => void;
+  handleLoginShow: () => void;
 }
 
-function RegisterModal({ show, handleClose }: RegisterModalProps) {
+function RegisterModal({ show, handleClose, handleLoginShow }: RegisterModalProps) {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [role, setRole] = useState<string>('user');
   const { register } = useAuth();
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await register(email, password, role);
+    await register(email, password, role, (message) => {
+      alert(message)});
     handleClose();
+    handleLoginShow
   };
 
   return (
