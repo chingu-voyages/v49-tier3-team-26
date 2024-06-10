@@ -9,6 +9,8 @@ import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';
 import {Route, Routes, Navigate , useNavigate} from 'react-router-dom';
 import Discover from './components/Discover';
+import CreateListing from './components/CreateListing'
+import PetPage from './components/PetPage';
 
 
 function App() {
@@ -49,7 +51,12 @@ function App() {
         <Route path="/" element={user ? <Navigate to="/" /> : <div>Welcome, please login or register.</div>} />
         <Route path="/chat" element={user ? <ChatRoom /> : <Navigate to="/" />} />
         <Route path="/discover" element={<Discover />} />
+
         
+
+        <Route path="/new-listing" element={<CreateListing />} />
+        <Route path="/discover/:id" element={<PetPage />} />
+
       </Routes>
 
     </div>

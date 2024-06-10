@@ -8,13 +8,23 @@
     justify-content: space-between;
     position: relative;
 }
+
 p {
     margin: 0;
 }
+
 .img {
-    /* background-color: lightcoral; */
-    margin-top: 15px;
     align-self: center;
+}
+
+.placeholderImg {
+    margin-top: 10px;
+    width: 150px;
+}
+
+.photo {
+    max-height: 167px;
+    max-width: 100%;
 }
 
 .paw {
@@ -55,7 +65,7 @@ p {
     width: 12px;
     height: 12px;
     margin-right: 2px;
-}
+  }
 
 .tags {
     display: flex;
@@ -64,14 +74,4 @@ p {
     gap: 2px;
     text-align: end;
     min-height: 16px;
-}
-.tag {
-    width: fit-content;
-    height: 16px;
-    font-size: 10px;
-    color: white;
-    background-color: #C6C6C6;
-    min-width:fit-content;
-    padding: 0 5px;
-    border-radius: 5px;
 }
