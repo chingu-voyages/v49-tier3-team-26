@@ -9,9 +9,12 @@ interface HeaderProps {
 
 function Header({ handleLoginShow, handleRegisterShow, handleChatClick }: HeaderProps) {
     const { user, logout } = useAuth();
+  
     const handleLogout = async () => {
         await logout();
       };
+
+      
     return(
         <header >
             <h1 >PAWFECT Match</h1>

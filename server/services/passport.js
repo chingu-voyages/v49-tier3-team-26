@@ -1,33 +1,40 @@
-//Passport imports
-const passport = require('passport');
-const LocalStrategy = require('passport-local');
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const {
+  verifyPassword,
+  findUserById,
+  findUserByEmail,
+} = require("../models/user.model"); // Adjust as needed
 
-//User model imports
-const {verifyPassword, findUserById}= require('../models/user.model')
+const strategy = new LocalStrategy(
+  { usernameField: "email" },
+  async (email, password, done) => {
+    try {
+      const user = await findUserByEmail(email); // Find the user by email
+      if (!user) {
+        return done(null, false, { message: "Incorrect email." });
+      }
+      const authenticatedUser = await verifyPassword(email, password);
+      return done(null, authenticatedUser);
+    } catch (err) {
+      return done(err);
+    }
+  }
+);
 
-//Initialize Passport strategy "local" in order to login with username & password
-const strategy  = new LocalStrategy(verifyPassword);
 passport.use(strategy);
 
-
-//User serialization
-//The user id of the logged in user is stored in the passport session
 passport.serializeUser((user, done) => {
-    //Store user id in session
-    done(null, user[0].id);
-})
-
-
-//User deserialization
-//When we need to know who is logged in based on the provided session cookie, we look up
-//if the user in session is an actual user from our DB 
-passport.deserializeUser(async function(userId, done){
-    try {
-        //Look for user in the DB 
-        const user= await findUserById(userId)
-        return done(null, user)
-    }
-   catch(err) {
-    return done(err)
-   } 
+  done(null, user.id); // Store user id in session
 });
+
+passport.deserializeUser(async (id, done) => {
+  try {
+    const user = await findUserById(id);
+    done(null, user);
+  } catch (err) {
+    done(err);
+  }
+});
+
+module.exports = passport;
